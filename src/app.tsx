@@ -5,8 +5,8 @@ import HomePage from './pages/home';
 import NotFoundPage from './pages/not-found';
 import history from './utils/history';
 import './app.less';
-
 import client from './lib/apollo-client';
+import JobDetail from './pages/job-detail';
 
 const App: React.FC = () => (
   <ApolloProvider client={client}>
@@ -14,6 +14,9 @@ const App: React.FC = () => (
     <Switch>
       <Route exact path="/">
         <HomePage />
+      </Route>
+      <Route path="/:id">
+        <JobDetail />
       </Route>
       <Route>
         <NotFoundPage />

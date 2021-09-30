@@ -3,7 +3,7 @@ import React from 'react';
 
 const Menu = () => {
   const MENUS = [
-    { key: '/', label: 'Home' },
+    { key: 'home', label: 'Home' },
     { key: 'job', label: 'Job List' },
     { key: 'postJob', label: 'Post Your Job' },
   ];
@@ -11,7 +11,7 @@ const Menu = () => {
   return (
     <>
       {MENUS.map((m) => (
-        <Button key={m.key} type="link" href={`${m.key}`} className="text-weight-medium">
+        <Button key={m.key} type="link" href={`/#${m.key}`} className="text-weight-medium">
           {m.label}
         </Button>
       ))}
