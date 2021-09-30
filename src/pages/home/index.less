@@ -1,0 +1,46 @@
+/*
+ * home section
+ */
+#home {
+  overflow: hidden;
+  position: relative;
+}
+
+#home video {
+  min-width: 100vw;
+  min-height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+#home > .ant-row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(to right, @second-blue, transparent);
+}
+
+#home .ant-typography {
+  position: relative;
+}
+
+#home sup {
+  position: absolute;
+  right: 0;
+  top: 100%;
+}
+
+@media (max-width: 768px) {
+  #home > .ant-row::before {
+    background-image: linear-gradient(to top, @second-blue, transparent);
+  }
+  #home .text-size-72 {
+    font-size: 56px !important;
+  }
+}

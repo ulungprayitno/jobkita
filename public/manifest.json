@@ -1,0 +1,8 @@
+{
+  "short_name": "JOBKITA",
+  "name": "jobKita",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#006ac6",
+  "background_color": "#ffffff"
+}
