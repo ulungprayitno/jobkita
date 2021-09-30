@@ -2,6 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';
+import 'moment/locale/id';
 
 
 const root = document.getElementById('root');
