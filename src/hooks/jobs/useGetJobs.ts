@@ -6,9 +6,11 @@ const GET_JOBS = gql`
         jobs {
           id
           title
+          slug
           locationNames
           company {
             name
+            slug
             logoUrl
           }
         }

@@ -11,7 +11,7 @@ const Menu = () => {
   return (
     <>
       {MENUS.map((m) => (
-        <Button key={m.key} type="link" href={`/#${m.key}`} className="text-weight-medium">
+        <Button key={m.key} type="link" href={m.key === 'postJob' ? `/${m.key}` :`/#${m.key}`} className="text-weight-medium">
           {m.label}
         </Button>
       ))}

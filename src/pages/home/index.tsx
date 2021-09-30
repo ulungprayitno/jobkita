@@ -62,7 +62,7 @@ const HomePage = () => {
                       placeholder='Tags'
                     />
                   </Col>
-                  <Col md={4} lg={4} xs={24} >
+                  <Col sm={8} lg={4} xs={24} >
                     <Button type="primary" block icon={<SearchOutlined />} size='large'>
                       Search
                     </Button>
@@ -89,7 +89,7 @@ const HomePage = () => {
              }}
              dataSource={jobs}
               renderItem={item => (
-                <List.Item className='use-pointer' onClick={() => window.location.href = `/${item.id}` }>
+                <List.Item className='use-pointer' onClick={() => window.location.href = `/${item.company.slug}/${item.slug}` }>
                   <List.Item.Meta
                     avatar={<Avatar src={item.company.logoUrl ? item.company.logoUrl : 'https://i.ibb.co/kVLw4RG/company-logo.png'} size={80}/>}
                     title={<Text className='text-size-18 text-weight-medium'>{item.title}</Text>}

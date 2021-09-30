@@ -2,10 +2,12 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Row, Col, Typography } from 'antd';
 import Layout from '../../components/layout';
+import { useGetDetailJob } from '../../hooks/jobs/useGetDetailJob';
 
 const JobDetail = () => {
-  const { id } = useParams<{ id: string }>();
-  console.log(id)
+  const { companySlug, jobSlug } = useParams<{ companySlug: string, jobSlug: string }>();
+
+  useGetDetailJob(companySlug, jobSlug)
   
   return (
     <Layout>
