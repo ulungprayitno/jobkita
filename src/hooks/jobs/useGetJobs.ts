@@ -1,12 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import { Job } from "../../interfaces/job";
 
-interface JobOrderByInput {
-  variables: {
-    orderBy?: string
-  }
-}
-
 const GET_JOBS = gql`
     query GetJobs {
         jobs {
@@ -27,9 +21,9 @@ const GET_JOBS = gql`
 `
 
 export const GET_FILTER_JOBS = gql`
-    query GetFilterJobs($orderBy: JobOrderByInput!) {
+    query GetFilterJobs($orderBy: JobOrderByInput, $where: JobWhereInput) {
         cities{
-          jobs(orderBy: $orderBy){
+          jobs(orderBy: $orderBy, where: $where){
             id
             locationNames
             title
@@ -51,13 +45,4 @@ export const useGetJobs = (): Job[] | undefined => {
         variables: { options: { paginate: { page: 1, limit: 10 } } }
     });
     return data?.jobs;
-}
-
-export const useGetFilterJobs = (orderBy: JobOrderByInput): Job[] | undefined => {
-  const { data } = useQuery(GET_FILTER_JOBS, {
-      ...orderBy
-  });
-
-  console.log(data)
-  return data?.jobs;
 }

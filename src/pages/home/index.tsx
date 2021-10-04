@@ -1,21 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
-import { Col, Row, Typography, List, Avatar, Input, Button, Tag, Select } from 'antd';
+import { Col, Row, Typography, List, Avatar, Input, Button, Tag, Select, Spin } from 'antd';
 import Layout from '../../components/layout';
-import { useGetJobs } from '../../hooks/jobs/useGetJobs';
-
+import { GET_FILTER_JOBS } from '../../hooks/jobs/useGetJobs';
 import { SearchOutlined } from '@ant-design/icons';
-
+import { useQuery } from '@apollo/client';
+import { City } from '../../interfaces/city';
+import { Job } from '../../interfaces/job';
 
 const { Text } = Typography;
 const { Option } = Select
 
 const HomePage = () => {
   const [sorting, setSorting] = useState<string>('postedAt_DESC')
-  const jobs = useGetJobs();
-  
-  const changeOrder = (value: string) => {
-    setSorting(value)
+  const { loading, data } = useQuery(GET_FILTER_JOBS, {
+    variables: { 
+      orderBy: sorting
+    }
+  })
+  let cities: Array<City> = []
+  let jobs: Array<Job> = []
+
+  if (data) {
+    cities = data.cities
+    cities.map(item =>  jobs = [...jobs, ...item.jobs])
   }
 
   return (
@@ -79,61 +87,63 @@ const HomePage = () => {
           </Col>
         </Row>
       </section>
-      <section id="job">
-        <Row justify='center'>
-          <Col xs={24} md={10} lg={10} className="p-2">
-            <Row className="mb-2" justify="start">
-              <Col span={12}>
-                <Text className="text-center text-var-montserrat text-weight-bold text-size-24 text-height-30">
-                  Jobs
-                </Text>
-              </Col>
-              <Col span={12}>
-                <Row justify='end'>
-                <Select defaultValue={sorting} style={{ width: 200 }} size='large' onChange={changeOrder}>
-                    <Option value="postedAt_DESC">Newest to Oldest</Option>
-                    <Option value="postedAt_ASC">Oldest to Newest</Option>
-                  </Select>
+        <section id="job">
+          <Row justify='center' className='mt-2'>
+            {loading ? <Spin size="large" /> :
+              <Col xs={24} md={10} lg={10} className="p-2">
+                <Row className="mb-2" justify="start">
+                  <Col span={12}>
+                    <Text className="text-center text-var-montserrat text-weight-bold text-size-24 text-height-30">
+                      Jobs
+                    </Text>
+                  </Col>
+                  <Col span={12}>
+                    <Row justify='end'>
+                    <Select defaultValue={sorting} style={{ width: 200 }} size='large' onChange={(value) => setSorting(value)}>
+                        <Option value="postedAt_DESC">Newest to Oldest</Option>
+                        <Option value="postedAt_ASC">Oldest to Newest</Option>
+                      </Select>
+                    </Row>
+                  </Col>
                 </Row>
-              </Col>
-            </Row>
-            <List
-             itemLayout="vertical"
-             pagination={{
-              showSizeChanger: false,
-               pageSize: 5,
-             }}
-             dataSource={jobs}
-              renderItem={item => (
-                <List.Item className='use-pointer' onClick={() => window.location.href = `/${item.company.slug}/${item.slug}` }>
-                  <List.Item.Meta
-                    avatar={<Avatar src={item.company.logoUrl ? item.company.logoUrl : 'https://i.ibb.co/kVLw4RG/company-logo.png'} size={80}/>}
-                    title={<Text className='text-size-18 text-weight-medium'>{item.title}</Text>}
-                    description={
-                      <Row className='mt-0'>
-                        <Col span={24}>
+                <List
+                itemLayout="vertical"
+                pagination={{
+                  showSizeChanger: false,
+                  pageSize: 5,
+                }}
+                dataSource={jobs}
+                  renderItem={item => (
+                    <List.Item className='use-pointer' onClick={() => window.location.href = `/${item.company.slug}/${item.slug}` }>
+                      <List.Item.Meta
+                        avatar={<Avatar src={item.company.logoUrl ? item.company.logoUrl : 'https://i.ibb.co/kVLw4RG/company-logo.png'} size={80}/>}
+                        title={<Text className='text-size-20 text-weight-medium'>{item.title}</Text>}
+                        description={
                           <Row className='mt-0'>
-                            <Text className='text-center text-var-montserrat text-weight-medium text-size-18 text-height-20'>{item?.company.name}</Text>
+                            <Col span={24}>
+                              <Row className='mt-0'>
+                                <Text className='text-center text-var-montserrat text-weight-medium text-size-16'>{item?.company.name}</Text>
+                              </Row>
+                              <Row className='mb-1'>
+                                <Text className='text-center text-var-montserrat text-size-14 text-height-20'>{item?.locationNames ?  item.locationNames : '-'}</Text>
+                              </Row>
+                              <Row>
+                              <Row>
+                                {item.tags?.map((tg, idx) => (
+                                  <Tag key={idx}>{tg.name}</Tag>
+                                ))}
+                              </Row>
+                              </Row>
+                            </Col>
                           </Row>
-                          <Row className='mb-1'>
-                            <Text className='text-center text-var-montserrat text-size-14 text-height-20'>{item?.locationNames ?  item.locationNames : '-'}</Text>
-                          </Row>
-                          <Row>
-                          <Row>
-                            {item.tags?.map((tg, idx) => (
-                              <Tag key={idx}>{tg.name}</Tag>
-                            ))}
-                          </Row>
-                          </Row>
-                        </Col>
-                      </Row>
-                    }
-                  />
-                  
-                </List.Item>
-              )}
-            />
-          </Col>
+                        }
+                      />
+                      
+                    </List.Item>
+                  )}
+                />
+              </Col>
+            }
         </Row>
       </section>
     </Layout>
